@@ -1,0 +1,123 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum PixKeyType {
+  CPF
+  EMAIL
+  PHONE
+  RANDOM
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum IdempotencyStatus {
+  RUNNING
+  COMPLETED
+}
+
+model User {
+  id           String         @id @default(uuid())
+  email        String         @unique
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  accounts     Account[]
+  refreshTokens RefreshToken[]
+  auditLogs    AuditLog[]
+}
+
+model Account {
+  id                   String        @id @default(uuid())
+  userId               String
+  user                 User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountNumber        String        @unique
+  balance              Decimal       @db.Decimal(20, 2)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  pixKeys              PixKey[]
+  sentTransactions     Transaction[] @relation("SentTransactions")
+  receivedTransactions Transaction[] @relation("ReceivedTransactions")
+
+  @@index([userId])
+}
+
+model PixKey {
+  id        String     @id @default(uuid())
+  accountId String
+  account   Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  type      PixKeyType
+  value     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([accountId])
+  @@index([value])
+}
+
+model Transaction {
+  id                 String            @id @default(uuid())
+  senderAccountId    String
+  senderAccount      Account           @relation("SentTransactions", fields: [senderAccountId], references: [id])
+  recipientAccountId String
+  recipientAccount   Account           @relation("ReceivedTransactions", fields: [recipientAccountId], references: [id])
+  amount             Decimal           @db.Decimal(20, 2)
+  description        String?
+  status             TransactionStatus @default(PENDING)
+  idempotencyKey     String?           @unique
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  @@index([senderAccountId])
+  @@index([recipientAccountId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  details   String   @db.Text
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+}
+
+model Idempotency {
+  key            String            @id
+  status         IdempotencyStatus @default(RUNNING)
+  responseStatus Int?
+  responseBody   String?           @db.Text
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([key])
+}
