@@ -35,14 +35,14 @@ services:
     environment:
       PORT: 3000
       NODE_ENV: production
-      DATABASE_URL: "postgresql://pix_user:pix_password@postgres:5432/pix_db?schema=public"
-      REDIS_URL: "redis://redis:6379"
-      JWT_SECRET: "production_secret_key_change_in_real_systems_01"
+      DATABASE_URL: "postgresql://user:password@localhost:5432/pix_db"
+      REDIS_URL: "redis://localhost:6379"
+      JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: "15m"
-      REFRESH_TOKEN_SECRET: "production_refresh_secret_key_change_in_real_systems_01"
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
       REFRESH_TOKEN_EXPIRES_IN: "7d"
       CORS_ORIGIN: "*"
-      THROTTLER_LIMIT: 10000
+      THROTTLER_LIMIT: 1000
     depends_on:
       postgres:
         condition: service_healthy
@@ -62,7 +62,7 @@ services:
       REFRESH_TOKEN_SECRET: "production_refresh_secret_key_change_in_real_systems_01"
       REFRESH_TOKEN_EXPIRES_IN: "7d"
       CORS_ORIGIN: "*"
-      THROTTLER_LIMIT: 10000
+      THROTTLER_LIMIT: 1000
     depends_on:
       postgres:
         condition: service_healthy
@@ -82,7 +82,7 @@ services:
       REFRESH_TOKEN_SECRET: "production_refresh_secret_key_change_in_real_systems_01"
       REFRESH_TOKEN_EXPIRES_IN: "7d"
       CORS_ORIGIN: "*"
-      THROTTLER_LIMIT: 10000
+      THROTTLER_LIMIT: 1000
     depends_on:
       postgres:
         condition: service_healthy
