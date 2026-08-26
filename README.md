@@ -729,3 +729,44 @@ O objetivo final não é apenas criar uma API que "transfere dinheiro".
 É entender **como projetar um sistema que continue confiável quando várias coisas acontecem ao mesmo tempo**.
 
 Esse é justamente um dos principais desafios de sistemas de pagamentos: não basta que uma operação funcione quando executada isoladamente. É necessário garantir que o comportamento continue correto diante de concorrência, falhas, requisições duplicadas e múltiplas instâncias da aplicação.
+
+
+#Limitações conhecidas e evolução
+
+Este projeto está em desenvolvimento e foi criado principalmente com fins educacionais e de aprendizado, buscando aplicar na prática conceitos de desenvolvimento backend, segurança, concorrência, persistência de dados, idempotência, testes e arquitetura de APIs.
+
+Durante o processo de desenvolvimento e revisão do projeto, identifiquei alguns pontos que ainda podem ser melhorados. Alguns deles estão relacionados a configurações de ambiente, comunicação entre containers, segurança, regras de negócio, tratamento de concorrência e aspectos de escalabilidade.
+
+Esses pontos não são ignorados: fazem parte do processo de evolução do projeto.
+
+Próximos passos
+
+Pretendo trabalhar progressivamente nos seguintes aspectos:
+
+   - Revisar e melhorar as configurações do ambiente Docker;
+
+   - Revisar configurações de segurança e gerenciamento de secrets;
+
+   - Melhorar o controle de idempotência;
+
+   - Revisar regras de negócio relacionadas a estornos;
+
+   - Aprimorar o tratamento de concorrência e estados das transações;
+
+   - Melhorar paginação e desempenho das consultas;
+
+   - Ampliar a cobertura de testes;
+
+   - Melhorar observabilidade, logs e tratamento de erros;
+
+   - Revisar a configuração para diferentes ambientes (development, test e production);
+
+   - Documentar as decisões técnicas e as melhorias realizadas ao longo do desenvolvimento.
+
+Aprendizado contínuo
+
+Uma das propostas deste projeto é justamente permitir que eu identifique problemas, investigue suas causas, corrija as implementações e aprenda com cada etapa.
+
+Por isso, algumas limitações podem permanecer temporariamente no código. Elas são registradas aqui para que o projeto tenha uma evolução transparente e para que cada melhoria represente uma oportunidade de aprendizado técnico.
+
+Este projeto não deve ser utilizado como sistema financeiro real ou em produção. Ele é uma implementação educacional inspirada em conceitos de APIs de pagamentos e no ecossistema Pix.
