@@ -478,11 +478,11 @@ PORT=3000
 
 NODE_ENV=development
 
-DATABASE_URL="postgresql://pix_user:pix_password@127.0.0.1:5432/pix_db?schema=public"
+DATABASE_URL="postgresql://user:password@localhost:5432/pix_db"
 
-REDIS_URL="redis://127.0.0.1:6379"
+REDIS_URL="redis://localhost:63799"
 
-JWT_SECRET="development_jwt_secret_please_change_in_production"
+JWT_SECRET="mude-me"
 
 JWT_EXPIRES_IN="15m"
 
